@@ -2,9 +2,12 @@
 let players = createPlayers();
 let board = makeBoard();
 let turn = firstTurn();
-console.log(players);
-console.log(board);
-console.log(turn);
+let numTurns=0;
+const boardSpots = document.querySelectorAll('.board-spot');
+boardSpots.forEach((spot)=> spot.addEventListener("click",playRound))
+const turnDisplay = document.querySelector('.turn-display');
+turnDisplay.textContent =`${turn.name}\'s turn`
+const winBox= document.querySelector('.winner');
 
 
 //
@@ -13,14 +16,19 @@ console.log(turn);
 //Game play
 function gamePlay(){
     let win = false;
-    numTurns=0;
-    while(win === false){
-        getPlayerMove();
-        numTurns+=1;
-        checkForWinner();
+    while(win === false || numTurns<9){
+        playRound();
     };
 };
 
+function playRound(event){
+    spotChoice=event.target.getAttribute('data-index');
+    displayPlayerMove(getPlayerMove(spotChoice));
+    numTurns+=1;
+    checkForWinner();
+    turnDisplay.textContent =`${turn.name}\'s turn`
+    return numTurns;
+};
 
 
 function checkForWinner(){
@@ -36,48 +44,50 @@ function checkForWinner(){
     //Check 
     const isTurnMarker= (spotValue)=> spotValue === turn.marker;
     if(row.every(isTurnMarker) || col.every(isTurnMarker) || diagonal1.every(isTurnMarker) || diagonal2.every(isTurnMarker)){
-        return win = true, console.log(`${turn.name} wins!`);
+        boardSpots.forEach((spot)=> spot.removeEventListener("click",playRound));
+        winBox.textContent =`${turn.name} wins!`;
+        return win = true; 
     }else if(numTurns === 9){
-        return win = true, console.log(`It's a tie!`);
+        return win = true, winBox.textContent = `It's a tie!`;
     }else{
-        return changeTurn();
+        changeTurn();
+        return win = false;
     };
 };
 
 
 
-function getPlayerMove(){
-    spotChoice=prompt(`${turn.name}, choose a spot 0-8:`);
-    while(board[spotChoice].value != 0){
+function getPlayerMove(spotChoice){
+    if(board[spotChoice].value != null){
         alert('That spot is already taken')
-        spotChoice=prompt(`${turn.name}, choose a spot 0-8:`);
-    } 
-    board[spotChoice].value = turn.marker
-    console.log(`${turn.name} took square ${board[spotChoice].spotName}`)
-    console.log(board);
-    return spotChoice;
+    }else{
+        board[spotChoice].value = turn.marker
+        //console.log(`${turn.name} took square ${board[spotChoice].spotName}`)
+        //console.log(board);
+        return spotChoice;
+    }
 };
 
+function displayPlayerMove(spotChoice){
+    let takenSpot = document.querySelector(`[data-index= '${spotChoice}']`);
+    takenSpot.textContent= board[spotChoice].value;
+    takenSpot.setAttribute('style',`color:${getMarkerColor(spotChoice)}; font-size:80%; font-weight:bold; font-size: 100px;`);
+};
 
+function getMarkerColor(spotChoice){
+    return board[spotChoice].value === "X" ? 'red':'blue';
+};
 
 function firstTurn(){
     let coinFlip = Math.floor(Math.random()*2);
-    if (coinFlip == 0){
-        return players[0];
-    }else{
-        return players[1];
-    };
+    return coinFlip == 0? players[0]:players[1];
 };
 
 
 function changeTurn(){
-    if (turn == players[0]){
-        return turn = players[1];
-    }else {
-        return turn = players[0];
-    };
+    return turn = turn == players[0] ? players[1]: players[0];
 };
-
+ 
 
 function makeBoard(){
     let board = []
@@ -89,23 +99,16 @@ function makeBoard(){
 
 function boardSpot(index){
     let spotName = index;
-    let value = 0;
+    let value = null;
     return{spotName, value};
 };
 
 function  createPlayers(){
-    const playerOneName = prompt("Type players[0] name:");
-    const playerTwoName = prompt('Type players[1] name')
+    const playerOneName = "mom" //prompt("Type player1 name:");
+    const playerTwoName = "dad" //prompt('Type player2 name')
 
     const players = [
-        {
-          name: playerOneName,
-          marker: 'X'
-        },
-        {
-          name: playerTwoName,
-          marker: 'O'
-        }
+        {name: playerOneName, marker: 'X'}, {name: playerTwoName, marker: 'O'}
       ];
     return players
 };
