@@ -20,6 +20,7 @@
     transform: translate(-50%, -50%);
     border: 1px solid #D6D9dc;
     border-radius: 8px;
+    padding: 20px;
 }
 
 ::backdrop {
@@ -27,9 +28,7 @@
     opacity:.75;
 }
 
-form{
-    margin: 20px;
-}
+
 
 .form-row{
     margin-bottom: 20px;
@@ -57,6 +56,7 @@ font-size: 1rem;
 #winBox{
     margin: 20px;
     font-size: 70px;
+    text-align: center;
 }
 
 button{
@@ -80,8 +80,9 @@ button:active{
 }
 
 #closeBtn, #confirmBtn{
-    margin-left: 20px;
-    margin-bottom: 20px;
+    position:relative;
+    left: 50%;
+    transform: translate(-50%,0);
     font-size: 1rem;
     padding: 8px;
     border-radius: 8px;

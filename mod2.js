@@ -1,4 +1,5 @@
-//Global variables and calls
+function screenController(){
+  //Global variables and calls
 let players = [];
 let board = makeBoard();
 let turn=null
@@ -159,4 +160,7 @@ function resetGame(){
     numTurns=0;
     nameInputDialog.showModal();
     boardSpots.forEach((spot)=> spot.addEventListener("click",playRound));
-}
+}  
+};
+
+screenController();
