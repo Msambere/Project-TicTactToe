@@ -1,15 +1,44 @@
 //hard code for testing
-let players = createPlayers();
+let players = [];
 let board = makeBoard();
-let turn = firstTurn();
+let turn=null
 let numTurns=0;
+
+
 const boardSpots = document.querySelectorAll('.board-spot');
 boardSpots.forEach((spot)=> spot.addEventListener("click",playRound))
-const turnDisplay = document.querySelector('.turn-display');
-turnDisplay.textContent =`${turn.name}\'s turn`
-const winBox= document.querySelector('.winner');
 
 
+
+const nameInputDialog = document.querySelector('.name-input');
+const winnerDialog = document.querySelector('.winner')
+const winnerDisplay= document.querySelector('#winBox')
+
+nameInputDialog.showModal();
+
+const confirmBtn = nameInputDialog.querySelector("#confirmBtn");
+const closeBtn = document.querySelector('#closeBtn');
+const resetBtn = document.querySelector('#resetBtn')
+
+const statusDisplay = document.querySelector('.status-display');
+
+ 
+confirmBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    nameInputDialog.close();
+    players = createPlayers();
+    turn = firstTurn();
+    statusDisplay.textContent =`${turn.name}\'s turn`
+    document.getElementById("name-form").reset();
+  });
+
+closeBtn.addEventListener("click", () => {
+    winnerDialog.close();
+  });
+
+resetBtn.addEventListener('click', () =>{
+    resetGame();
+});
 //
 
 
@@ -26,7 +55,6 @@ function playRound(event){
     displayPlayerMove(getPlayerMove(spotChoice));
     numTurns+=1;
     checkForWinner();
-    turnDisplay.textContent =`${turn.name}\'s turn`
     return numTurns;
 };
 
@@ -45,12 +73,16 @@ function checkForWinner(){
     const isTurnMarker= (spotValue)=> spotValue === turn.marker;
     if(row.every(isTurnMarker) || col.every(isTurnMarker) || diagonal1.every(isTurnMarker) || diagonal2.every(isTurnMarker)){
         boardSpots.forEach((spot)=> spot.removeEventListener("click",playRound));
-        winBox.textContent =`${turn.name} wins!`;
+        winnerDisplay.textContent = `${turn.name} wins!`;
+        winnerDialog.showModal();
         return win = true; 
     }else if(numTurns === 9){
-        return win = true, winBox.textContent = `It's a tie!`;
+        winnerDisplay.textContent = `It's a tie`;
+        winnerDialog.showModal();
+        return win = true;
     }else{
         changeTurn();
+        statusDisplay.textContent =`${turn.name}\'s turn`
         return win = false;
     };
 };
@@ -71,11 +103,11 @@ function getPlayerMove(spotChoice){
 function displayPlayerMove(spotChoice){
     let takenSpot = document.querySelector(`[data-index= '${spotChoice}']`);
     takenSpot.textContent= board[spotChoice].value;
-    takenSpot.setAttribute('style',`color:${getMarkerColor(spotChoice)}; font-size:80%; font-weight:bold; font-size: 100px;`);
+    takenSpot.setAttribute('style',`color:${getMarkerColor(spotChoice)};`);
 };
 
 function getMarkerColor(spotChoice){
-    return board[spotChoice].value === "X" ? 'red':'blue';
+    return board[spotChoice].value === "X" ? '#fe6d73':'#227c9d';
 };
 
 function firstTurn(){
@@ -93,6 +125,8 @@ function makeBoard(){
     let board = []
     for(x=0; x<9; x++){
         board.push(boardSpot(x))
+        let currentSpot = document.querySelector(`[data-index= '${x}']`);
+        currentSpot.textContent= null;
     };
     return board;
 }
@@ -104,11 +138,27 @@ function boardSpot(index){
 };
 
 function  createPlayers(){
-    const playerOneName = "mom" //prompt("Type player1 name:");
-    const playerTwoName = "dad" //prompt('Type player2 name')
+
+    const playerOneName = document.getElementById('player1').value || 'player1';
+    const playerTwoName = document.getElementById('player2').value || 'player2';
 
     const players = [
-        {name: playerOneName, marker: 'X'}, {name: playerTwoName, marker: 'O'}
+        {name: capitalizeFirstLetter(playerOneName), marker: 'X'}, {name: capitalizeFirstLetter(playerTwoName), marker: 'O'}
       ];
     return players
 };
+
+
+
+function capitalizeFirstLetter(string) {
+   return (string[0].toUpperCase()+string.slice(1).toLowerCase());
+};
+
+function resetGame(){
+    players = [];
+    board = makeBoard();
+    turn=null
+    numTurns=0;
+    nameInputDialog.showModal();
+    boardSpots.forEach((spot)=> spot.addEventListener("click",playRound));
+}

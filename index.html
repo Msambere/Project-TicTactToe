@@ -6,29 +6,54 @@
     <title>Project: Tic-Tac-Toe</title>
     <script src="java.js" defer></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,400&family=Varela+Round&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Project TicTacToe</h1>
-    <h3 class="turn-display"></h3>
-    <div class="container" id="board-container">
-        <div class="board-spot" data-index="0"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="1"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="2"></div>
-        <div class="gridline"></div><div class="gridline"></div><div class="gridline"></div><div class="gridline"></div><div class="gridline"></div>
-        <div class="board-spot" data-index="3"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="4"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="5"></div>
-        <div class="gridline"></div><div class="gridline"></div><div class="gridline"></div><div class="gridline"></div><div class="gridline"></div>
-        <div class="board-spot" data-index="6"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="7"></div>
-        <div class="gridline"></div>
-        <div class="board-spot" data-index="8"></div>
+    <div class="header">
+        <h1>Tic-Tac-Toe</h1>
     </div>
-    <h1 class="winner"> The winner is...</h1>
+    <div class="game-main">
+        <dialog class="name-input modal">
+            <form method="dialog" class="names" id="name-form">
+                <div class="form-row player1">
+                    <label for="player1">Player1's Name</label>
+                    <input type="text" id="player1" required>
+                </div>
+                <div class="form-row player2">
+                    <label for="player2">Player2's Name</label>
+                    <input type="text" id="player2" required>
+                </div>
+                <div class="form-buttons">
+                    <button id="confirmBtn" value="default" formmethod="dialog">Confirm</button>
+                  </div>
+            </form>
+        </dialog>
+        <dialog class ="winner modal">
+            <p id="winBox"></p>
+            <button id="closeBtn">close</button>
+        </dialog>
+        <div class="status">
+            <h2 class="status-display"></h3>
+        </div>
+        <div class="container">
+            <div class="grid" id="board-container">
+                <div class="board-spot" data-index="0"></div>
+                <div class="board-spot" data-index="1"></div>
+                <div class="board-spot" data-index="2"></div>
+                <div class="board-spot" data-index="3"></div>
+                <div class="board-spot" data-index="4"></div>
+                <div class="board-spot" data-index="5"></div>
+                <div class="board-spot" data-index="6"></div>
+                <div class="board-spot" data-index="7"></div>
+                <div class="board-spot" data-index="8"></div>
+            </div>
+        </div>
+        <div class="reset">
+            <button id="resetBtn">RESET</button>
+        </div>
+    </div>>
+    
 </body>
 </html>
